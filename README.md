@@ -63,5 +63,3 @@ Este archivo explica cómo las actividades en este repositorio desarrollan las s
   - Explicación: La aplicación del algoritmo K-medias y otros métodos de agrupamiento para analizar los patrones de los datos demuestra la construcción de modelos que se adaptan a la estructura de los datos para encontrar agrupamientos significativos.
 
 ---
-
-Cada una de las actividades mencionadas demuestra competencias clave en el análisis de datos, técnicas matemáticas, construcción de modelos y ética en la implementación de soluciones, proporcionando evidencias claras en cada subcompetencia.
