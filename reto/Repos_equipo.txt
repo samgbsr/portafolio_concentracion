@@ -1,0 +1,3 @@
+link al repo app web: https://github.com/samgbsr/heart_disease_predictor
+
+link al repo del equipo: https://github.com/isr-paredes/ECG-Heartbeat-Categorization 

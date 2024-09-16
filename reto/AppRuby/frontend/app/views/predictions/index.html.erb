@@ -1,0 +1,82 @@
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <div class="container mt-5 text-center text-box">
+    <h1 class="mb-4 pulse">Heart Disease Prediction Model</h1>
+    <h3 class="text-muted">Upload CSV for Heart Disease Prediction</h3>
+    <%= form_tag(upload_path, multipart: true, id: 'upload-form', method: :post, authenticity_token: true, data: { turbo: false }) do %> 
+      <div class="mb-3">
+        <%= file_field_tag :file, class: "form-control form-control-sm", id: 'fileInput', required: true %>  <!-- Smaller input -->
+      </div>
+      <%= submit_tag "Submit", class: "btn btn-primary pulse" %>  <!-- Pulsing button -->
+    <% end %>
+  </div>
+</div>
+
+<div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resultModalLabel">Prediction Result</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalBody">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    background: url(<%= asset_path 'ecg_background.jpg' %>) no-repeat center center fixed;
+    background-size: cover;
+  }
+
+  .text-box {
+    background-color: rgba(255, 255, 255, 0.85);  
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);  
+    max-width: 600px;
+  }
+
+  h1, h3 {
+    color: #28a745;  
+    font-family: 'Courier New', Courier, monospace; 
+    font-weight: bold;  
+  }
+
+  .btn-primary {
+    background-color: #28a745;  
+    border-color: #28a745;
+    font-weight: bold; 
+  }
+
+  .btn-primary:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+  }
+
+  .modal-content {
+    border: 2px solid #dc3545; 
+  }
+
+  .modal-title {
+    color: #dc3545;
+  }
+
+  .form-control-sm {
+    background-color: rgba(255, 255, 255, 0.9);  /* Light transparency */
+  }
+
+  .pulse {
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+</style>

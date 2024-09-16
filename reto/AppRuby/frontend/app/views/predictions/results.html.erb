@@ -1,0 +1,87 @@
+<h1 class="text-center my-4">Prediction Results</h1>
+
+<div class="container-fluid content-box">
+  <% if @results.present? %>
+    <table class="table table-hover table-bordered text-center table-responsive">
+      <thead class="table-dark">
+        <tr>
+          <th>Highest Probability</th>
+          <th>Predicted Class</th>
+          <th>Letter</th>
+          <th>Date and Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @results.each do |result| %>
+          <tr>
+            <td><%= result.probabilidades.split(',').map(&:to_f).max %></td>
+            
+            <td><%= result.clase_predicha %></td>
+            
+            <td>
+              <%= case result.clase_predicha.to_i
+                  when 0 then 'N'
+                  when 1 then 'S'
+                  when 2 then 'V'
+                  when 3 then 'F'
+                  when 4 then 'Q'
+                  else 'NA'
+                end %>
+            </td>
+
+            <td><%= result.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="text-center alert alert-info">No prediction results available.</p>
+  <% end %>
+</div>
+
+
+<style>
+  body {
+    background: url(<%= asset_path 'ecg_background.jpg' %>) no-repeat center center fixed;
+    background-size: cover;
+    overflow-x: hidden;  
+  }
+
+  .navbar-dark .navbar-brand, .navbar-dark .nav-link {
+    color: #ffffff !important;  
+  }
+
+  .content-box {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    margin: auto;
+    margin-top: 30px;
+  }
+
+  h1 {
+    color: #28a745;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  table th, table td {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold; 
+  }
+
+  .table-dark th {
+    background-color: #28a745;
+  }
+
+  .alert-info {
+    background-color: #28a745;
+    color: white;
+  }
+</style>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for?(:title) ? yield(:title) : "Heart Disease Predictor" %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="turbo-visit-control" content="reload">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="icon" href="<%= asset_path 'favicon.ico' %>" type="image/x-icon">
+
+
+    <%= yield :head %>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Heart Disease Predictor</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/results">Results</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <%= yield %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  let isSubmitting = false;  // Flag to prevent multiple submissions
+
+  const form = document.getElementById('upload-form');
+  const fileInput = document.getElementById('fileInput');
+
+  axios.defaults.headers.common['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  if (form) {
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      if (isSubmitting) return;  // Prevent multiple submissions
+      isSubmitting = true;
+
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+
+      try {
+        const response = await axios.post('/upload', formData);
+        const result = response.data.result;
+
+        if (result) {
+          document.getElementById('modalBody').innerHTML = `
+            <p><strong>Predicted Class:</strong> ${result.clase_predicha}</p>
+            <p><strong>Probabilities:</strong> ${result.probabilidades.join(', ')}</p>
+          `;
+
+          const resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+          resultModal.show();
+
+          resultModal._element.addEventListener('hidden.bs.modal', function () {
+            // Reset the form and submission flag when the modal is closed
+            form.reset();
+            isSubmitting = false;
+          });
+        } else {
+          throw new Error('Invalid result from server');
+        }
+      } catch (error) {
+        console.error('Error during prediction:', error);
+        alert("An error occurred during the prediction.");
+        isSubmitting = false;  // Reset flag on error
+      }
+    });
+  }
+});
+
+</script>
